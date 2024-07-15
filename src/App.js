@@ -5,6 +5,7 @@ function App() {
   const [newMember, setNewMember] = useState("");
   const [numberA, setNumberA] = useState("");
   const [numberB, setNumberB] = useState("");
+  const [numberC, setNumberC] = useState("");
 
   useEffect(() => {
     fetchMembers();
@@ -70,12 +71,13 @@ function App() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ numberA, numberB }),
+        body: JSON.stringify({ numberA, numberB, numberC }),
       });
 
       if (response.ok) {
         setNumberA("");
         setNumberB("");
+        setNumberC("");
         fetchMembers();
       } else {
         console.error("Failed to add sum");
@@ -95,14 +97,7 @@ function App() {
           </li>
         ))}
       </ul>
-      <input
-        type="text"
-        value={newMember}
-        onChange={(e) => setNewMember(e.target.value)}
-        placeholder="Add new member"
-      />
-      <button onClick={addMember}>Add Member</button>
-      <br />
+
       <input
         type="number"
         value={numberA}
@@ -114,6 +109,12 @@ function App() {
         value={numberB}
         onChange={(e) => setNumberB(e.target.value)}
         placeholder="Number B"
+      />
+      <input
+        type="number"
+        value={numberC}
+        onChange={(e) => setNumberC(e.target.value)}
+        placeholder="Number C"
       />
       <button onClick={addNumbers}>Add Sum</button>
     </div>
