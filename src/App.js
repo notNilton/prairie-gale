@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 function App() {
   const [members, setMembers] = useState([]);
   const [newMember, setNewMember] = useState("");
+  const [numberA, setNumberA] = useState("");
+  const [numberB, setNumberB] = useState("");
 
   useEffect(() => {
     fetchMembers();
@@ -61,6 +63,28 @@ function App() {
     }
   };
 
+  const addNumbers = async () => {
+    try {
+      const response = await fetch("/sum", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ numberA, numberB }),
+      });
+
+      if (response.ok) {
+        setNumberA("");
+        setNumberB("");
+        fetchMembers();
+      } else {
+        console.error("Failed to add sum");
+      }
+    } catch (error) {
+      console.error("Error adding sum:", error);
+    }
+  };
+
   return (
     <div>
       <h1>Member List</h1>
@@ -78,6 +102,20 @@ function App() {
         placeholder="Add new member"
       />
       <button onClick={addMember}>Add Member</button>
+      <br />
+      <input
+        type="number"
+        value={numberA}
+        onChange={(e) => setNumberA(e.target.value)}
+        placeholder="Number A"
+      />
+      <input
+        type="number"
+        value={numberB}
+        onChange={(e) => setNumberB(e.target.value)}
+        placeholder="Number B"
+      />
+      <button onClick={addNumbers}>Add Sum</button>
     </div>
   );
 }
