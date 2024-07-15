@@ -41,12 +41,34 @@ function App() {
     }
   };
 
+  const deleteMember = async (name) => {
+    try {
+      const response = await fetch("/members", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name }),
+      });
+
+      if (response.ok) {
+        fetchMembers();
+      } else {
+        console.error("Failed to delete member");
+      }
+    } catch (error) {
+      console.error("Error deleting member:", error);
+    }
+  };
+
   return (
     <div>
       <h1>Member List</h1>
       <ul>
         {members.map((member, index) => (
-          <li key={index}>{member}</li>
+          <li key={index}>
+            <button onClick={() => deleteMember(member)}>{member}</button>
+          </li>
         ))}
       </ul>
       <input
@@ -59,5 +81,5 @@ function App() {
     </div>
   );
 }
-// Dummy Code
+
 export default App;
