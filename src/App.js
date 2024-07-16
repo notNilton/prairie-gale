@@ -3,9 +3,13 @@ import React, { useState, useEffect } from "react";
 function App() {
   const [members, setMembers] = useState([]);
   const [newMember, setNewMember] = useState("");
-  const [incidenceMatrix, setIncidenceMatrix] = useState("");
-  const [measurements, setMeasurements] = useState("");
-  const [tolerances, setTolerances] = useState("");
+  const [incidenceMatrix, setIncidenceMatrix] = useState(
+    "[[1, -1, -1, 0, 0], [0, 0, 1, -1, -1]]"
+  );
+  const [measurements, setMeasurements] = useState("[161, 79, 80, 63, 20]");
+  const [tolerances, setTolerances] = useState(
+    "[0.05, 0.01, 0.01, 0.10, 0.05]"
+  );
 
   useEffect(() => {
     fetchMembers();
@@ -88,17 +92,17 @@ function App() {
       <textarea
         value={incidenceMatrix}
         onChange={(e) => setIncidenceMatrix(e.target.value)}
-        placeholder='Incidence Matrix (e.g. "[[1, 0], [0, 1]]")'
+        placeholder='Incidence Matrix (e.g. "[[1, -1, -1, 0, 0], [0, 0, 1, -1, -1]]")'
       />
       <textarea
         value={measurements}
         onChange={(e) => setMeasurements(e.target.value)}
-        placeholder='Measurements (e.g. "[6, 55]")'
+        placeholder='Measurements (e.g. "[161, 79, 80, 63, 20]")'
       />
       <textarea
         value={tolerances}
         onChange={(e) => setTolerances(e.target.value)}
-        placeholder='Tolerances (e.g. "[0.1, 0.2]")'
+        placeholder='Tolerances (e.g. "[0.05, 0.01, 0.01, 0.10, 0.05]")'
       />
       <button onClick={reconcileData}>Reconcile Data</button>
 
