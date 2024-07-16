@@ -25,28 +25,28 @@ function App() {
     }
   };
 
-  const addMember = async () => {
-    if (!newMember.trim()) return;
+  // const addMember = async () => {
+  //   if (!newMember.trim()) return;
 
-    try {
-      const response = await fetch("/members", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name: newMember }),
-      });
+  //   try {
+  //     const response = await fetch("/members", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ name: newMember }),
+  //     });
 
-      if (response.ok) {
-        setNewMember("");
-        fetchMembers();
-      } else {
-        console.error("Failed to add member");
-      }
-    } catch (error) {
-      console.error("Error adding member:", error);
-    }
-  };
+  //     if (response.ok) {
+  //       setNewMember("");
+  //       fetchMembers();
+  //     } else {
+  //       console.error("Failed to add member");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error adding member:", error);
+  //   }
+  // };
 
   const reconcileData = async () => {
     try {
@@ -80,13 +80,13 @@ function App() {
   return (
     <div>
       <h1>Input</h1>
-      <input
+      {/* <input
         type="text"
         value={newMember}
         onChange={(e) => setNewMember(e.target.value)}
         placeholder="New Member Name"
       />
-      <button onClick={addMember}>Add Member</button>
+      <button onClick={addMember}>Add Member</button> */}
 
       <h2>Reconciliation</h2>
       <textarea
