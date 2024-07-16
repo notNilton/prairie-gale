@@ -3,11 +3,9 @@ import React, { useState, useEffect } from "react";
 function App() {
   const [members, setMembers] = useState([]);
   const [newMember, setNewMember] = useState("");
-  const [numbers, setNumbers] = useState({
-    numberA: "",
-    numberB: "",
-    numberC: "",
-  });
+  const [incidenceMatrix, setIncidenceMatrix] = useState("");
+  const [measurements, setMeasurements] = useState("");
+  const [tolerances, setTolerances] = useState("");
 
   useEffect(() => {
     fetchMembers();
@@ -46,36 +44,33 @@ function App() {
     }
   };
 
-  const addNumbers = async () => {
+  const reconcileData = async () => {
     try {
-      const parsedNumbers = {
-        numberA: JSON.parse(numbers.numberA),
-        numberB: JSON.parse(numbers.numberB),
-        numberC: JSON.parse(numbers.numberC),
-      };
-
-      const response = await fetch("/sum", {
+      const response = await fetch("/reconcile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(parsedNumbers),
+        body: JSON.stringify({
+          incidence_matrix: JSON.parse(incidenceMatrix),
+          measurements: JSON.parse(measurements),
+          tolerances: JSON.parse(tolerances),
+        }),
       });
 
       if (response.ok) {
-        console.log(parsedNumbers);
-        setNumbers({ numberA: "", numberB: "", numberC: "" });
+        const data = await response.json();
+        console.log("Reconciled Measurements:", data.reconciled_measurements);
+        setIncidenceMatrix("");
+        setMeasurements("");
+        setTolerances("");
         fetchMembers();
       } else {
-        console.error("Failed to add sum");
+        console.error("Failed to reconcile data");
       }
     } catch (error) {
-      console.error("Error adding sum:", error);
+      console.error("Error reconciling data:", error);
     }
-  };
-
-  const handleInputChange = (e, key) => {
-    setNumbers({ ...numbers, [key]: e.target.value });
   };
 
   return (
@@ -83,23 +78,29 @@ function App() {
       <h1>Input</h1>
       <input
         type="text"
-        value={numbers.numberA}
-        onChange={(e) => handleInputChange(e, "numberA")}
-        placeholder="Text A (JSON array)"
+        value={newMember}
+        onChange={(e) => setNewMember(e.target.value)}
+        placeholder="New Member Name"
       />
-      <input
-        type="text"
-        value={numbers.numberB}
-        onChange={(e) => handleInputChange(e, "numberB")}
-        placeholder="Text B (JSON array)"
+      <button onClick={addMember}>Add Member</button>
+
+      <h2>Reconciliation</h2>
+      <textarea
+        value={incidenceMatrix}
+        onChange={(e) => setIncidenceMatrix(e.target.value)}
+        placeholder='Incidence Matrix (e.g. "[[1, 0], [0, 1]]")'
       />
-      <input
-        type="text"
-        value={numbers.numberC}
-        onChange={(e) => handleInputChange(e, "numberC")}
-        placeholder="Text C (JSON array)"
+      <textarea
+        value={measurements}
+        onChange={(e) => setMeasurements(e.target.value)}
+        placeholder='Measurements (e.g. "[6, 55]")'
       />
-      <button onClick={addNumbers}>Add Sum</button>
+      <textarea
+        value={tolerances}
+        onChange={(e) => setTolerances(e.target.value)}
+        placeholder='Tolerances (e.g. "[0.1, 0.2]")'
+      />
+      <button onClick={reconcileData}>Reconcile Data</button>
 
       <ul>
         {members.map((member, index) => (
